@@ -1,4 +1,14 @@
+import React from 'react';
+import { useRef } from 'react'
+
 function ImagePopup ({card, onClose, stopProp}) {
+  const containerSize = useRef(null)
+
+  const setContainerSize = (evt) => {
+    containerSize.current.style.width = `${evt.target.offsetWidth}px`
+    containerSize.current.style.height = `${evt.target.offsetHeight}px`
+  }
+
   return (
     <div
       className={`popup popup_type_image ${card && 'popup_opened'}`}
@@ -7,6 +17,7 @@ function ImagePopup ({card, onClose, stopProp}) {
         <figure
           className="popup__figure"
           onClick={stopProp}
+          ref={containerSize}
         >
           <button
             type="button"
@@ -19,6 +30,7 @@ function ImagePopup ({card, onClose, stopProp}) {
             className="popup__image"
             src={card ? card.link : ''}
             alt={card ? card.name : ''}
+            onLoad={setContainerSize}
           />
           <figcaption className="popup__caption">{card ? card.name : ''}</figcaption>
         </figure>
