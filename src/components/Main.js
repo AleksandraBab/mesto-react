@@ -1,5 +1,5 @@
 import React from 'react'
-import {api} from '../utils/Api'
+import {api} from '../utils/api'
 import Card from './Card'
 
 function Main ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
@@ -12,11 +12,11 @@ function Main ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
     api.getInitialData()
       .then( (arg) => {
-        const [dataFirtsPromise, dataSecondPromise] = arg;
-        setUserName(dataFirtsPromise.name);
-        setUserDescription(dataFirtsPromise.about);
-        setUserAvatar(dataFirtsPromise.avatar)
-        setCards(dataSecondPromise);
+        const [userData, initialCards] = arg;
+        setUserName(userData.name);
+        setUserDescription(userData.about);
+        setUserAvatar(userData.avatar)
+        setCards(initialCards);
       })
       .catch((err) => {
         console.log(err);
@@ -33,7 +33,7 @@ function Main ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
               <img
                 className="profile__avatar"
                 src={userAvatar}
-                alt=""
+                alt={userName}
               />
               <div className="profile__bckgrnd"></div>
             </div>

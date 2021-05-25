@@ -3,10 +3,11 @@ function Card ({card, onCardClick}) {
   return (
     <li
       className="element"
-      onClick={() => onCardClick(card)}
     >
       <div className="element__image-wrapper">
-        <img className="element__image" src={card.link} alt={card.name} />
+        <img className="element__image" src={card.link} alt={card.name}
+          onClick={() => onCardClick(card)}
+        />
         <button
           type="button"
           className="element__delete-btn"

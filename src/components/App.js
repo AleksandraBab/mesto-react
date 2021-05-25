@@ -38,14 +38,19 @@ function App() {
     evt.stopPropagation();
   }
 
-  const handleEscClose = (evt) => {
-    if (evt.key === 'Escape') {
-      closeAllPopups()
-    }
-  }
 
   React.useEffect( () => {
+    const handleEscClose = (evt) => {
+      if (evt.key === 'Escape') {
+        closeAllPopups()
+      }
+    }
+
     document.addEventListener('keydown', handleEscClose)
+
+    return () => {
+      document.removeEventListener('keydown', handleEscClose)
+    }
   }, [])
 
   return (
@@ -65,17 +70,14 @@ function App() {
         buttonText="Сохранить"
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
-        stopProp={stopProp}
+        stopProp={stopProp}>
 
-        children={
-          <>
-            <input type="text" name="author" placeholder="Введите имя" id="name" className="popup__input popup__input_type_name" required minLength="2" maxLength="40" />
-            <span className="popup__error popup__error_type_name"></span>
-            <input type="text" name="job" placeholder="Введите профессию" id="caption" className="popup__input popup__input_type_caption" required minLength="2" maxLength="200" />
-            <span className="popup__error popup__error_type_caption"></span>
-          </>
-        }
-      />
+        <input type="text" name="author" placeholder="Введите имя" id="name" className="popup__input popup__input_type_name" required minLength="2" maxLength="40" />
+        <span className="popup__error popup__error_type_name"></span>
+        <input type="text" name="job" placeholder="Введите профессию" id="caption" className="popup__input popup__input_type_caption" required minLength="2" maxLength="200" />
+        <span className="popup__error popup__error_type_caption"></span>
+
+      </PopupWithForm>
 
       <PopupWithForm
         name="add"
@@ -83,22 +85,19 @@ function App() {
         buttonText="Создать"
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
-        stopProp={stopProp}
-        children={
-          <>
-            <input type="text" name="place" placeholder="Название" id="place" className="popup__input popup__input_type_place" required minLength="2" />
-            <span className="popup__error popup__error_type_place"></span>
-            <input type="url" name="photo" placeholder="Ссылка на картинку" id="src" className="popup__input popup__input_type_src" required />
-            <span className="popup__error popup__error_type_src"></span>
-          </>
-        }
-      />
+        stopProp={stopProp}>
+
+        <input type="text" name="place" placeholder="Название" id="place" className="popup__input popup__input_type_place" required minLength="2" />
+        <span className="popup__error popup__error_type_place"></span>
+        <input type="url" name="photo" placeholder="Ссылка на картинку" id="src" className="popup__input popup__input_type_src" required />
+        <span className="popup__error popup__error_type_src"></span>
+
+      </PopupWithForm>
 
       <PopupWithForm
         name="del"
         title="Вы уверены?"
         buttonText="Да"
-        children={null}
       />
 
       <PopupWithForm
@@ -107,14 +106,12 @@ function App() {
         buttonText="Сохранить"
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
-        stopProp={stopProp}
-        children={
-          <>
-            <input type="url" name="avatar" placeholder="Вставьте ссылку на изображение" id="avatar" className="popup__input popup__input_type_avatar" required />
-            <span className="popup__error popup__error_type_avatar"></span>
-          </>
-        }
-      />
+        stopProp={stopProp}>
+
+        <input type="url" name="avatar" placeholder="Вставьте ссылку на изображение" id="avatar" className="popup__input popup__input_type_avatar" required />
+        <span className="popup__error popup__error_type_avatar"></span>
+
+      </PopupWithForm>
 
       <ImagePopup
         card={selectedCard}
