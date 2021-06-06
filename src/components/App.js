@@ -17,6 +17,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false)
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false)
   const [selectedCard, setSelectedCard] = React.useState(null)
+  const [deleteCard, setDeleteCard] = React.useState(null)
   const [cards, setCards] = React.useState([])
 
   const [currentUser, setCurrentUser] = React.useState(React.useContext(CurrentUserContext))
@@ -39,6 +40,7 @@ function App() {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
     setSelectedCard(null)
+    setDeleteCard(null)
   }
 
   const stopProp = (evt) => {
@@ -98,6 +100,10 @@ function App() {
     setSelectedCard(card)
   }
 
+  const handleDelClick = (card) => {
+    setDeleteCard(card)
+  }
+
   React.useEffect(() => {
 
     api.getInitialCards()
@@ -142,6 +148,7 @@ function App() {
     .then((data) => {
       const newCards = cards.filter((item) => item !== deletedCard);
       setCards(newCards);
+      closeAllPopups()
     })
     .catch((err) => {
       console.log(err);
@@ -171,9 +178,9 @@ function App() {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onCardClick={handleCardClick}
+        onDelClick={handleDelClick}
         cards={cards}
         onCardLike={handleCardLike}
-        onCardDelete={handleDeleteClick}
       />
       <Footer />
 
@@ -199,11 +206,10 @@ function App() {
       />
 
       <DeletePlacePopup
-        isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
         stopProp={stopProp}
-        card={selectedCard}
-        onDelPlace={handleCardClick}
+        card={deleteCard}
+        onCardDelete={handleDeleteClick}
       />
 
       <ImagePopup

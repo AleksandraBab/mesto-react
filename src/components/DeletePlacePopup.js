@@ -1,10 +1,12 @@
 import React from 'react'
 
 export default function DeletePlacePopup (props) {
-  const {onDelPlace, card, onClose, stopProp} = props;
+  const {onCardDelete, card, onClose, stopProp} = props;
 
   function handleSubmit(evt) {
     evt.preventDefault();
+
+    onCardDelete(card)
   }
 
   return  (

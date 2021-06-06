@@ -3,8 +3,8 @@ import CurrentUserContext from '../contexts/CurrentUserContext'
 
 function Card (props) {
 
-  const {card, onCardClick, onCardLike, onCardDelete} = props;
-  
+  const {card, onCardClick, onCardLike, onDelClick} = props;
+
   const currentUser = React.useContext(CurrentUserContext);
   const isOwn = card.owner._id === currentUser._id;
 
@@ -23,7 +23,7 @@ function Card (props) {
           type="button"
           className={`${isOwn ? 'element__delete-btn' : 'element__delete-btn_hidden'}`}
           aria-label="Удалить"
-          onClick={() => onCardDelete(card)}
+          onClick={() => onDelClick(card)}
         >
         </button>
       </div>

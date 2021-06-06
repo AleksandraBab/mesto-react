@@ -3,7 +3,7 @@ import Card from './Card'
 import CurrentUserContext from '../contexts/CurrentUserContext'
 
 function Main (props) {
-  const {onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete} = props
+  const {onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onDelClick} = props
   const currentUser = React.useContext(CurrentUserContext)
 
 
@@ -50,7 +50,7 @@ function Main (props) {
                       card={item}
                       onCardClick={onCardClick}
                       onCardLike={onCardLike}
-                      onCardDelete={onCardDelete}
+                      onDelClick={onDelClick}
                     />
               ))}
             </ul>
