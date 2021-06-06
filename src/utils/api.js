@@ -62,15 +62,15 @@ class Api {
       .then(this._checkResponse)
   }
 
-    editAvatar (newAvatar) {
-      return fetch(`${this._url}/users/me/avatar`, {
-      method: 'PATCH',
-      headers: this._headers,
-       body: JSON.stringify({
-        avatar: newAvatar.avatar,
-       })
+  editAvatar (newAvatar) {
+    return fetch(`${this._url}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: this._headers,
+     body: JSON.stringify({
+      avatar: newAvatar.avatar,
+     })
     })
-      .then(this._checkResponse)
+    .then(this._checkResponse)
   }
 
   setLike (id) {

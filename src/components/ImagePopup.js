@@ -30,7 +30,6 @@ function ImagePopup ({card, onClose, stopProp}) {
             className="popup__image"
             src={card ? card.link : ''}
             alt={card ? card.name : ''}
-            onLoad={setContainerSize}
           />
           <figcaption className="popup__caption">{card ? card.name : ''}</figcaption>
         </figure>
