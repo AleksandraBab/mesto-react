@@ -2,7 +2,6 @@ import Header from './Header'
 import Footer from './Footer'
 import Main from './Main'
 import ImagePopup from './ImagePopup'
-import PopupWithForm from './PopupWithForm'
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup'
@@ -19,6 +18,11 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState(null)
   const [deleteCard, setDeleteCard] = React.useState(null)
   const [cards, setCards] = React.useState([])
+
+  const [delButtonText, setDelButtonText] = React.useState('Да')
+  const [editButtonText, setEditButtonText] = React.useState('Сохранить')
+  const [avatarButtonText, setAvatarButtonText] = React.useState('Сохранить')
+  const [placeButtonText, setPlaceButtonText] = React.useState('Создать')
 
   const [currentUser, setCurrentUser] = React.useState(React.useContext(CurrentUserContext))
 
@@ -73,6 +77,7 @@ function App() {
   /* Сабмит попапов профиля */
 
   function handleUpdateUser (data) {
+    setEditButtonText('Сохранение...')
     api.editProfileInfo (data)
       .then( (data) => {
         setCurrentUser(data);
@@ -80,10 +85,14 @@ function App() {
     })
     .catch((err) => {
       console.log(err);
-    });
+    })
+    .finally(() => {
+      setEditButtonText('Сохранить')
+    })
   }
 
    function handleUpdateAvatar (data) {
+    setAvatarButtonText('Сохранение...')
     api.editAvatar (data)
       .then( (data) => {
         setCurrentUser(data);
@@ -91,7 +100,10 @@ function App() {
     })
     .catch((err) => {
       console.log(err);
-    });
+    })
+    .finally(() => {
+      setAvatarButtonText('Сохранить')
+    })
   }
 
   /* Работа с карточками */
@@ -144,8 +156,9 @@ function App() {
   }
 
   function handleDeleteClick (deletedCard) {
+    setDelButtonText('Удаление...')
     api.deleteItem(deletedCard._id)
-    .then((data) => {
+    .then(() => {
       const newCards = cards.filter((item) => item !== deletedCard);
       setCards(newCards);
       closeAllPopups()
@@ -153,11 +166,15 @@ function App() {
     .catch((err) => {
       console.log(err);
     })
+    .finally(() => {
+      setDelButtonText('Да')
+    })
   }
 
   /* Сабмит добавления карточки */
 
   function handleAddPlaceSubmit (newCard) {
+    setPlaceButtonText('Сохранение...')
     api.postItem (newCard)
       .then( (newCard) => {
         setCards([newCard, ...cards]);
@@ -165,7 +182,10 @@ function App() {
     })
     .catch((err) => {
       console.log(err);
-    });
+    })
+    .finally(() => {
+      setPlaceButtonText('Создать')
+    })
   }
 
   /* Разметка */
@@ -189,6 +209,7 @@ function App() {
         onClose={closeAllPopups}
         stopProp={stopProp}
         onUpdateUser={handleUpdateUser}
+        buttonText={editButtonText}
       />
 
       <EditAvatarPopup
@@ -196,6 +217,7 @@ function App() {
         onClose={closeAllPopups}
         stopProp={stopProp}
         onUpdateAvatar={handleUpdateAvatar}
+        buttonText={avatarButtonText}
       />
 
       <AddPlacePopup
@@ -203,6 +225,7 @@ function App() {
         onClose={closeAllPopups}
         stopProp={stopProp}
         onAddPlace={handleAddPlaceSubmit}
+        buttonText={placeButtonText}
       />
 
       <DeletePlacePopup
@@ -210,6 +233,7 @@ function App() {
         stopProp={stopProp}
         card={deleteCard}
         onCardDelete={handleDeleteClick}
+        buttonText={delButtonText}
       />
 
       <ImagePopup

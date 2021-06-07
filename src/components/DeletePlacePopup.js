@@ -1,7 +1,8 @@
 import React from 'react'
+import PopupWithForm from './PopupWithForm'
 
 export default function DeletePlacePopup (props) {
-  const {onCardDelete, card, onClose, stopProp} = props;
+  const {onCardDelete, card, onClose, stopProp, buttonText} = props;
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -10,30 +11,17 @@ export default function DeletePlacePopup (props) {
   }
 
   return  (
-  <div className={`popup popup_type_del ${card && 'popup_opened'}`}
-    onClick={onClose}
-  >
-    <div
-        className="popup__container"
-        onClick={stopProp}
+
+    <PopupWithForm
+      title={'Вы уверены?'}
+      name={'del'}
+      buttonText={buttonText}
+      isOpen={card}
+      onClose={onClose}
+      stopProp={stopProp}
+      onSubmit={handleSubmit}
+      valid={true}
     >
-      <button
-        type="button"
-        className={`popup__close-btn popup__close-btn_place_del`}
-        aria-label="Закрыть без сохранения"
-        onClick={onClose}
-      >
-      </button>
-      <h2 className="popup__heading">Вы уверены?</h2>
-      <form
-        onSubmit={handleSubmit}
-        className={`popup__form popup__form_type_del`}
-        name="del"
-        noValidate
-        >
-        <button type="submit" className={`popup__submit-btn popup__submit-btn_type_del`}>Да</button>
-      </form>
-    </div>
-  </div>
+    </PopupWithForm>
   )
 }

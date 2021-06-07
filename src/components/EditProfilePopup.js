@@ -1,87 +1,93 @@
 import React from 'react'
 import CurrentUserContext from '../contexts/CurrentUserContext'
+import PopupWithForm from './PopupWithForm'
 
 export default function EditProfilePopup (props) {
-  const {onUpdateUser, isOpen, onClose, stopProp} = props;
+  const {onUpdateUser, isOpen, onClose, stopProp, buttonText} = props;
 
   const currentUser = React.useContext(CurrentUserContext);
-  const [name, setName] = React.useState('')
-  const [description, setDescription] = React.useState('')
+
+  const [formValues, setFormValues] = React.useState({
+    userName: '',
+    caption: ''
+  });
+
+  const [formValidity, setFormValidity] = React.useState({
+    nameValid: true,
+    descValid: true
+  });
 
   React.useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
-  }, [currentUser])
+    setFormValues({
+      userName: currentUser.name,
+      caption: currentUser.about
+    })
+  }, [currentUser, isOpen])
 
   React.useEffect(() => {
-    if (!isOpen) {
-      setName(currentUser.name);
-      setDescription(currentUser.about);
-    } 
-  })
+    const isUserNameValid = formValues.userName.length > 1;
+    const isCaptionValid = formValues.caption.length > 1;
 
-  function handleNameChange(evt) {
-    setName(evt.target.value);
-  }
+    setFormValidity({
+      nameValid: isUserNameValid,
+      descValid: isCaptionValid
+    })
+  }, [formValues])
 
-  function handleDescriptionChange(evt) {
-    setDescription(evt.target.value);
-  }
+
+  const handleInputChange = React.useCallback ((evt) => {
+    const { name, value } = evt.target
+
+    setFormValues((prevState) => ({
+      ...prevState, [name]: value
+    }));
+  }, [formValues]);
 
   function handleSubmit(evt) {
     evt.preventDefault();
 
-    onUpdateUser({name, about: description});
-  } 
+    onUpdateUser({name: userName, about: caption});
+  }
 
+  const {userName, caption} = formValues;
+  const {nameValid, descValid} = formValidity;
+  const isSubmitAble = nameValid && descValid;
 
   return  (
-  <div className={`popup popup_type_edit ${isOpen && 'popup_opened'}`}
-    onClick={onClose}
-  >
-    <div
-        className="popup__container"
-        onClick={stopProp}
+    <PopupWithForm
+      title={'Редактировать профиль'}
+      name={'edit'}
+      buttonText={buttonText}
+      isOpen={isOpen}
+      onClose={onClose}
+      stopProp={stopProp}
+      onSubmit={handleSubmit}
+      valid={isSubmitAble}
     >
-      <button
-        type="button"
-        className={`popup__close-btn popup__close-btn_place_edit`}
-        aria-label="Закрыть без сохранения"
-        onClick={onClose}
-      >
-      </button>
-      <h2 className="popup__heading">Редактировать профиль</h2>
-      <form
-        onSubmit={handleSubmit}
-        className={`popup__form popup__form_type_edit`}
-        name="edit"
-        noValidate>
-        <input
-            value={name}
-            onChange={handleNameChange}
-            type="text"
-            name="author"
-            placeholder="Введите имя"
-            id="name"
-            className="popup__input popup__input_type_name"
-            required minLength="2"
-            maxLength="40"
-        />
-        <span className="popup__error popup__error_type_name"></span>
-        <input
-            value={description}
-            onChange={handleDescriptionChange}
-            type="text" name="job"
-            placeholder="Введите профессию"
-            id="caption"
-            className="popup__input popup__input_type_caption"
-            required minLength="2"
-            maxLength="200"
-        />
-        <span className="popup__error popup__error_type_caption"></span>
-        <button type="submit" className={`popup__submit-btn popup__submit-btn_type_edit`}>Сохранить</button>
-      </form>
-    </div>
-  </div>
+      <input
+          value={userName}
+          onChange={handleInputChange}
+          type="text"
+          name="userName"
+          placeholder="Введите имя"
+          id="name"
+          className={`popup__input popup__input_type_name ${nameValid ? '' : 'popup__input_type_error'}`}
+          required minLength="2"
+          maxLength="40"
+      />
+      <input
+          value={caption}
+          onChange={handleInputChange}
+          name="caption"
+          type="text"
+          placeholder="Введите профессию"
+          id="caption"
+          className={`popup__input popup__input_type_caption ${descValid ? '' : 'popup__input_type_error'}`}
+          required minLength="2"
+          maxLength="200"
+      />
+
+    </PopupWithForm>
+
   )
 }
